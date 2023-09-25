@@ -22,7 +22,7 @@
 #'
 #' @export
 #'
-flash_init <- function(data, S = NULL, var_type = 0L, S_dim = NULL) {
+flash_init <- function(data, S = NULL, var_type = 0L, S_dim = NULL, V=NULL) {
   flash <- set.flash.data(data, S = S, S.dim = S_dim, var.type = var_type)
 
   if (is.var.type.zero(flash) && !is.tau.simple(flash)) {
@@ -36,6 +36,20 @@ flash_init <- function(data, S = NULL, var_type = 0L, S_dim = NULL) {
     flash$log.2pi.s2 <- init.log.2pi.s2(get.given.tau(flash))
   } else if (is.var.type.kronecker(flash)) {
     flash$kron.nonmissing <- init.kron.nonmissing(flash)
+  }
+
+  # deal with non-zero V
+  # note: maybe this code could/should be moved to set.flash.data?
+  must.be.supported.data.type(V)
+  must.be.compatible.data.types(data,V)
+  if(is.null(V)){
+    flash <- set.baseR2(flash, 0)
+  } else {
+    if(!is.tau.simple(flash)){
+       stop("Facility to specify non-zero V is only implemented for simple Tau structures")
+    } else {
+       flash <- set.baseR2(flash, calc.baseR2(flash, V))
+    }
   }
 
   # Calculate initial residual variances and ELBO.

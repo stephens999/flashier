@@ -130,6 +130,14 @@
 #'   It is also possible to output a single tab-delimited table of values
 #'   using function \code{\link{flash_set_verbose}} with \code{verbose = -1}.
 #'
+#'  @param V a matrix of same dimension as data whose ijth element is to be added to the expected residual in the variational objective function.
+#'  in the objective function, so this term becomes E((Y_ij-LF'_ij)^2) + V_{ij}.
+#'  Specifying non-zero V affects updates/estimation of tau, but does not otherwise affect the
+#'  updates of L and F; it may be useful for some applications (in development) where flash is applied
+#'  as part of an inner loop to a data matrix whose values are themselves uncertain (V represent the
+#'  posterior variances of these matrix elements). This parameter is currently implemented only for simple variances structures (S=NULL and
+#'  var_type \in (0,1,2)).
+#'
 #' @return A \code{flash} object. Contains elements:
 #'   \describe{
 #'     \item{\code{n_factors}}{The total number of factor/loadings pairs \eqn{K}
@@ -223,8 +231,9 @@ flash <- function(data,
                   greedy_Kmax = 50L,
                   backfit = FALSE,
                   nullcheck = TRUE,
-                  verbose = 1L) {
-  fl <- flash_init(data, S = S, var_type = var_type)
+                  verbose = 1L,
+                  V = NULL) {
+  fl <- flash_init(data, S = S, var_type = var_type, V=V)
 
   fl <- flash_greedy(fl, Kmax = greedy_Kmax, ebnm_fn = ebnm_fn,
                      verbose = verbose)

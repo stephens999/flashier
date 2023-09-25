@@ -31,6 +31,7 @@ get.n.nonmissing      <- function(f) f[["n.nonmissing"]]
 get.kron.nonmissing   <- function(f) f[["kron.nonmissing"]]
 get.Y2                <- function(f) f[["Y2"]]
 get.R2                <- function(f) f[["R2"]]
+get.baseR2            <- function(f) f[["baseR2"]]
 get.delta.R2          <- function(f) f[["delta.R2"]]
 get.log.2pi.s2        <- function(f) f[["log.2pi.s2"]]
 get.sum.tau.R2        <- function(f) f[["sum.tau.R2"]]
@@ -530,6 +531,10 @@ set.Y2 <- function(f, Y2) {
 }
 set.R2 <- function(f, R2) {
   f[["R2"]] <- R2
+  return(f)
+}
+set.baseR2 <- function(f, baseR2) {
+  f[["baseR2"]] <- baseR2
   return(f)
 }
 set.delta.R2 <- function(f, delta.R2) {

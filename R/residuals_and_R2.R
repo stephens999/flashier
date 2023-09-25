@@ -84,6 +84,19 @@ calc.R2 <- function(flash) {
   return(R2)
 }
 
+# compute baseR2 as sum(V) [if var_type=0] or rowSums(V) [var_type=1] or colSums(V) [var_type=2]
+calc.baseR2 = function(flash, V){
+  var_type = get.est.tau.dim(flash)
+  if(var_type == 0){
+    return(sum(V))
+  } else if(var_type == 1){
+    return(rowSums(V))
+  } else if(var_type == 2){
+    return(colSums(V))
+  }
+  stop("Error: not yet implemented to combine V with var_type ",var_type)
+}
+
 # Used to update tau when tau is simple.
 calc.delta.R2 <- function(factor, flash) {
   R <- get.R(flash)
